@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,19 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/login', function () {
+    $credentials = [
+        'cn' => 'user01',
+        'password' => 'password1',
+    ];
+    
+    if (Auth::attempt($credentials)) {
+        $user = Auth::user();
+
+        dd("Welcome back, {$user->name}");
+    } else {
+        dd("Login failed!");
+    }
 });
