@@ -99,6 +99,26 @@ services:
             - '/dev/shm:/dev/shm'
         networks:
             - sail
+    lldap:
+        image: nitnelave/lldap:stable
+        ports:
+        # For LDAP
+        - "3890:3890"
+        # For the web front-end
+        - "17170:17170"
+        volumes:
+        - "lldap_data:/data"
+        # Alternatively, you can mount a local folder
+        # - "./lldap_data:/data"
+        environment:
+        - LLDAP_JWT_SECRET=REPLACE_WITH_RANDOM
+        - LLDAP_LDAP_USER_PASS=REPLACE_WITH_PASSWORD
+        - LLDAP_LDAP_BASE_DN=dc=example,dc=com
+        # You can also set a different database:
+        # - LLDAP_DATABASE_URL=mysql://mysql-user:password@mysql-server/my-database
+        # - LLDAP_DATABASE_URL=postgres://postgres-user:password@postgres-server/my-database
+        networks:
+            - sail
 networks:
     sail:
         driver: bridge
@@ -108,4 +128,6 @@ volumes:
     sail-redis:
         driver: local
     sail-meilisearch:
+        driver: local
+    lldap_data:
         driver: local
